@@ -1,5 +1,5 @@
 {
-  "name": "uclanserver",
+  "name": "uclanserverdb",
   "version": "1.0.0",
   "main": "server.js",
   "type": "module",
@@ -12,17 +12,14 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@clerk/express": "^2.1.9",
+    "@clerk/express": "^2.1.10",
     "axios": "^1.15.2",
-    "cloudinary": "^2.9.0",
+    "cloudinary": "^2.10.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "inngest": "^4.2.5",
-    "mongoose": "^9.5.0",
-    "nodemailer": "^8.0.6",
-    "stripe": "^22.1.0",
-    "svix": "^1.92.2"
+    "inngest": "^4.2.6",
+    "mongoose": "^9.6.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
