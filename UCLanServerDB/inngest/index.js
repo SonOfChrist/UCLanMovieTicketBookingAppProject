@@ -2,6 +2,7 @@ import { Inngest } from "inngest";
 import User from "../models/User.js";
 import Booking from "../models/Booking.js";
 import Show from "../models/Show.js";
+import sendEmail from "../configs/nodeMailer.js";
 
 // Create a client to send and receive events
 export const inngest = new Inngest({ id: "UCLanMovieTicketBookingApp" });
@@ -68,10 +69,40 @@ const releaseSeatsAfterUnpaid = inngest.createFunction(
     }
 )
 
+// Inngest function to send an email when user books a show
+const sendBookingConfirmationEmail = inngest.createFunction(
+    { id: "send-booking-confirmation-email", triggers: [{ event: "app/booking.created" }] },
+    async ({ event, step }) => {
+        const { userId, bookingId } = event.data;
+       
+        const booking= await Booking.findById(bookingId).populate({
+            path: 'show',
+            populate: {
+                path: 'movie',
+                model: 'Movie'
+            }
+        }).populate('user');
+        await sendEmail({
+            to: booking.user.email,
+            subject: `Booking Confirmation: "${booking.show.movie.title} Booked Successfully!"`,
+            body: `<div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
+                <h2 style="color: #007BFF;">Hi ${booking.user.name}</h2>
+                <p>Your booking for <strong style="color: #007BFF;">${booking.show.movie.title}</strong>is confirmed.</p>
+                <p>
+                    <strong>Date</strong> ${new Date(booking.show.showDateTime).toLocaleString('en-US', { timeZone: 'UTC' })}<br>
+                    <strong>Time</strong> ${new Date(booking.show.showDateTime).toLocaleString('en-US', { timeZone: 'UTC' })}<br>
+                </p>
+                <p>Enjoy the show! 🎬🍿</p>
+                <p>Thanks for Booking with us! <br/>UCLanMovie Team</p>
+            </div>`
+        })
+    }
+);
 
 export const functions = [
     syncUserCreation, 
     syncUserDeletion,
     syncUserUpdation,
-    releaseSeatsAfterUnpaid
+    releaseSeatsAfterUnpaid,
+    sendBookingConfirmationEmail
 ];
