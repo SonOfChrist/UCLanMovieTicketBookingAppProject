@@ -99,10 +99,102 @@ const sendBookingConfirmationEmail = inngest.createFunction(
     }
 );
 
+// inngest functions to send Reminders
+const sendBookingReminderEmail = inngest.createFunction(
+    { id: "send-booking-reminder-email", triggers: [{ cron: "0 */8 * * *" }] },
+    async ({ step }) => {
+        const now = new Date();
+        const eightHoursLater = new Date(now.getTime() + 8 * 60 * 60 * 1000);
+        const windowStart = new Date(eightHoursLater.getTime() - 10 * 60 * 1000);
+
+        // Prepare Reminder Task
+        const reminderTask = await step.run
+        ("prepare-reminder-tasks", async () => {
+            const shows = await Show.find({ 
+                showTime: { $gte: windowStart, $lte: eightHoursLater },
+             }).populate('movie');
+             const tasks = [];
+
+             for(const show of shows){
+                if(!show.movie || !show.occupiedSeats) continue;
+                const occupiedSeats = Object.keys(show.occupiedSeats);
+                const userIds = [...new Set(Object.values(show.occupiedSeats))];
+                if(userIds.length === 0) continue;
+                const users = await User.find({_id: {$in: userIds}}).select('name email');
+                for(const user of users){
+                    tasks.push({
+                        userEmail: user.email,
+                        userName: user.name,
+                        movieTitle: show.movie.title,
+                        showTime: show.showTime
+                    })
+                }
+
+            }
+            return tasks;
+        })
+        if(reminderTask.length === 0){
+            return {sent: 0, message: "No reminders to send at this time."}
+        }
+        // send reminder emails
+        const results = await step.run("send-reminder-emails", async () => {
+            return await Promise.allSettled(
+                reminderTask.map((task) => sendEmail({
+                    to: task.userEmail,
+                    subject: `Reminder: ${task.movieTitle} is coming up!`,
+                    body: `<div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
+                        <h2 style="color: #007BFF;">Hi ${task.userName}</h2>
+                        <p>This is a friendly reminder that your booking for <strong style="color: #007BFF;">${task.movieTitle}</strong> is scheduled for <strong>${new Date(task.showTime).toLocaleString('en-US', { timeZone: 'UTC' })}</strong>.</p>
+                        <p>Enjoy the show! 🎬🍿</p>
+                        <p>Thanks for Booking with us! <br/>UCLanMovie Team</p>
+                    </div>`
+                }))
+            )
+        })
+        const sent = results.filter(r => r.status === "fulfilled").length;
+        const failed = results.filter.length -sent;
+        return {
+            sent,
+            failed, 
+            message: `Sent: ${sent} reminder(s), Failed: ${failed} failed.`
+        }
+    }
+)
+
+// Send a new show Notification email to users
+const sendNewShowNotification = inngest.createFunction(
+    { id: "send-new-show-notification", triggers: [{ event: "app/show.added" }] },
+    async ({ event }) => {
+        const { movieTitle, movieId } = event.data;
+        const users = await User.find({})
+        for(const user of users){
+            const userEmail = user.email;
+            const userName = user.name;
+            const subject = `New Movie Alert: ${movieTitle} is now available for booking!`;
+            const body = `<div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
+                <h2 style="color: #007BFF;">Hi ${userName}</h2>
+                <p> We have just added a new movie to our lineup!</p>
+                <p>We are excited to announce that a new movie <strong style="color: #007BFF;">${movieTitle}</strong> is now available for booking on our platform.</p>
+                <p>Don't miss out on the chance to watch this amazing movie. Book your tickets now! 🎬🍿</p>
+                <a href="${process.env.CLIENT_URL}/movies/${movieId}" style="display: inline-block; padding: 10px 20px; background-color: #007BFF; color: #fff; text-decoration: none; border-radius: 5px;">Book Now</a>
+                <p>Thanks for being a valued member of our community! <br/>UCLanMovie Team</p>
+            </div>`;
+            await sendEmail({
+                to: userEmail, 
+                subject, 
+                body
+            })
+        }
+        return {message: "Notification Sent"}
+    }
+)
+
 export const functions = [
     syncUserCreation, 
     syncUserDeletion,
     syncUserUpdation,
     releaseSeatsAfterUnpaid,
-    sendBookingConfirmationEmail
+    sendBookingConfirmationEmail,
+    sendBookingReminderEmail,
+    sendNewShowNotification
 ];
