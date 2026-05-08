@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react';
 import { assets } from '../../../UCLanClient/src/assets/assets'
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
-// import { Github, Twitter, Mail, Facebook } from 'lucide-react';
+import { Mail, Film, ArrowUp, Phone, MapPin } from 'lucide-react';
+import { FaGithub, FaTwitter, FaFacebook, FaEnvelope, FaInstagram } from 'react-icons/fa';
 
 const Footer = () => {
     const [email, setEmail] = useState('');
@@ -12,169 +12,147 @@ const Footer = () => {
     const handleSubscribe = (e) => {
         e.preventDefault();
         setError('');
-        // Simple email validation {Create a complex email validation system application}
+        
         if (!email || !/\S+@\S+\.\S+/.test(email)) {
           setError('Please enter a valid email address.');
           return;
         }
+        
         setSubscribed(true);
         setEmail('');
-        // Add API call for real subscription later after the project
-      };
+    };
+
+    const scrollToTop = () => {
+         window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
     return (
+        <footer className="w-full mt-20 border-t border-white/10 bg-[#050505]/80 backdrop-blur-xl relative z-10 pt-16 pb-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col lg:flex-row justify-between gap-12 border-b border-white/10 pb-12">
 
-        <footer className="px-6 md:px-16 lg:px-36 mt-10 w-full text-gray-200 bg-linear-to-r from-black via-primary/80 to-pink-900/80 rounded-t-3xl shadow-2xl border-t">
-            <div className="flex flex-col md:flex-row justify-between w-full gap-10 border-b border-gray-700 pb-7 pt-10">
-                <div className="md:max-w-96">
-                    <img className="w-36 h-auto drop-shadow-xl" src={assets.LogoWhite} alt="StanShow Logo" />
-                    <p className="text-sm text-muted-foreground text-gray-300">
-                        StanShow (University of Lancashire) is your ultimate movie ticket companion—discover, book, and enjoy the latest blockbusters with ease. Experience seamless booking, exclusive offers, and a world of entertainment at your fingertips!
-                    </p>
-                    <div className="flex items-center gap-3 mt-6">
-                        <img src={assets.googlePlay} alt="Google Play" className="h-10 w-auto hover:scale-105 transition" />
-                        <img src={assets.appStore} alt="App Store" className="h-10 w-auto hover:scale-105 transition" />
-                    </div>
+              {/* Column 1: Brand & Sub */}
+              <div className="lg:max-w-sm">
+                <Link to="/" className="flex items-center gap-2 mb-6">
+                  <Film className="w-8 h-8 text-rose-500" />
+                  <img className="w-30 h-auto drop-shadow-xl" src={assets.LogoWhite} alt="StanShow Logo" />
+                </Link>
+                <p className="text-sm text-slate-400 leading-relaxed mb-6">
+                  StanShow (University of Lancashire) is your ultimate movie ticket companion—discover, book, and enjoy the latest blockbusters with ease. Experience seamless booking, exclusive offers, and a world of entertainment at your fingertips!
+                </p>
+                <div className="flex items-center gap-3 mt-6">
+                    <img src={assets.googlePlay} alt="Google Play" className="h-10 w-auto hover:scale-105 transition" />
+                    <img src={assets.appStore} alt="App Store" className="h-10 w-auto hover:scale-105 transition" />
+                </div>
 
                 {/* Social Media Links */}
-                <div className="flex items-center gap-4 mt-6">
-                    <a href="https://Instagram.com" target="_blank" rel="" aria-label="Instargarm"><img src={assets.Instagram_icon} alt="Instagram" className="h-6 w-6 hover:scale-110 transition" /></a>
-                    <a href="https://facebook.com" target="_blank" rel="" aria-label="facebook"><img src={assets.Facebook_icon} alt="Facebook" className="h-6 w-6 hover:scale-110 transition" /></a>
-                    <a href="https://X.com" target="_blank" rel="" aria-label="X"><img src={assets.X_icon_2} alt="X" className="h-6 w-6 hover:scale-110 transition" /></a>
-                    <a href="https://tiktok.com" target="_blank" rel="" aria-label="tiktok"><img src={assets.tiktok_icon_black} alt="tiktok" className="h-6 w-6 hover:scale-110 transition" /></a>
+                <div className="flex items-center gap-4 mb-8 text-slate-400 mt-6">
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-rose-500 transition-colors bg-white/5 p-2 rounded-full border border-white/10 hover:border-rose-500/50 hover:bg-rose-500/10">
+                        <FaInstagram className="w-4 h-4" /> 
+                    </a>
+                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-rose-500 transition-colors bg-white/5 p-2 rounded-full border border-white/10 hover:border-rose-500/50 hover:bg-rose-500/10">
+                        <FaFacebook className="w-4 h-4" /> 
+                    </a>
+                    <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="hover:text-rose-500 transition-colors bg-white/5 p-2 rounded-full border border-white/10 hover:border-rose-500/50 hover:bg-rose-500/10">
+                        <FaTwitter className="w-4 h-4" /> 
+                    </a>
                 </div>
 
                 {/* Newsletter Signup */}
-                <div className="mt-8">
+                <div>
+                    <h3 className="text-[10px] font-black tracking-widest text-white uppercase mb-4">Subscribe for updates</h3>
                     {subscribed ? (
-                    <div className="text-green-400 font-semibold py-2">Thank you for subscribing!</div>
+                      <div className="text-green-400 font-bold py-2 text-sm uppercase tracking-wider bg-green-500/10 px-4 rounded-xl border border-green-500/20 text-center">Thank you for subscribing!</div>
                     ) : (
-                    <form className="flex flex-col sm:flex-row gap-2" onSubmit={handleSubscribe}>
-                        <input
-                        type="email"
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                        placeholder="Subscribe for updates"
-                        className="px-4 py-2 rounded-l-md bg-gray-800 text-gray-200 focus:outline-none"
-                        />
-                        <button
-                        type="submit"
-                        className="px-4 py-2 bg-primary text-white rounded-r-md font-semibold hover:bg-pink-500 transition"
-                        >
-                        Subscribe
-                        </button>
-                    </form>
+                      <form className="flex gap-2" onSubmit={handleSubscribe}>
+                          <input
+                            type="email"
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                            placeholder="Email address..."
+                            className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all font-mono"
+                          />
+                          <button type="submit" className="bg-rose-600 hover:bg-rose-500 text-white font-bold px-6 py-3 rounded-xl transition-all text-xs tracking-widest uppercase shadow-lg shadow-rose-900/20 shrink-0"> Subscribe </button>
+                      </form>
                     )}
-                    {error && <div className="text-pink-400 text-sm mt-1">{error}</div>}
+                    {error && <div className="text-rose-400 text-xs mt-2 font-medium">{error}</div>}
                 </div>
-                </div>
-                <div className="flex-1 flex flex-col md:flex-row items-start md:justify-end gap-10 md:gap-32">
-                    <div>
-                        <h2 className="font-medium mb-4 text-primary">Navigation</h2>
-                        <ul className="text-base space-y-2">
-                            <li>
-                                <Link href="/" className="text-muted-foreground hover:text-foreground ">
-                                Home
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/" className="text-muted-foreground hover:text-foreground ">
-                                About
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/" className="text-muted-foreground hover:text-foreground ">
-                                Contact
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/" className="text-muted-foreground hover:text-foreground ">
-                                Privacy Policy
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/" className="text-muted-foreground hover:text-foreground ">
-                                Terms of Service
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 className='font-medium mb-4 text-primary'>Connect</h3>
-                        <ul className=' space-y-2 text-sm'>
-                            <li>
-                                <a href="https://github.com" 
-                                target='blank'
-                                rel='nooper noreferrer'
-                                className='flex items-center gap-2 text-muted-foreground hover:text-foreground'>
-                                    {/* <Github className='h-5 w-5' /> */}
-                                    <span>GitHub</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://twitter.com" 
-                                target='blank'
-                                rel='nooper noreferrer'
-                                className='flex items-center gap-2 text-muted-foreground hover:text-foreground'>
-                                    {/* <Twitter className='h-5 w-5' /> */}
-                                    <span>Twitter</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="mailto:mochogestanley80@gmail.com" 
-                                className='flex items-center gap-2 text-muted-foreground hover:text-foreground'>
-                                    {/* <Mail className='h-5 w-5' /> */}
-                                    <span>Mail</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://facebook.com" 
-                                target='blank'
-                                rel='nooper noreferrer'
-                                className='flex items-center gap-2 text-muted-foreground hover:text-foreground'>
-                                    {/* <Facebook className='h-5 w-5' /> */}
-                                    <span>Facebook</span>
-                                </a>
-                            </li>
+              </div>
 
-                        </ul>
-                    </div>
-                    <div>
-                        <h2 className="font-medium mb-4 text-primary">Contact Us</h2>
-                        <div className="text-base space-y-2">
-                        <p className="flex items-center gap-2 hover:text-gray-800 transition cursor-pointer"><span role="img" aria-label="phone">📞</span> +254-743-587-157</p>
-                        <p className="flex items-center gap-2 hover:text-gray-800 transition cursor-pointer"><span role="img" aria-label="email">✉️</span> mochogestanley80@gmail.com</p>
-                        <p className="flex items-center gap-2 hover:text-gray-800 transition cursor-pointer"><span role="img" aria-label="location">📍</span>Location Nairobi, Kenya 14252 - 00200</p>
-                        </div>
-                    </div>
+              {/* Columns 2-4: Links */}
+              <div className="flex-1 grid grid-cols-2 lg:grid-cols-3 gap-8">
+                <div>
+                    <h3 className="text-[14px] font-black tracking-widest text-white uppercase mb-6">Navigation</h3>
+                    <ul className="text-sm space-y-4 text-slate-400">
+                        <li><Link to="/" className="hover:text-rose-400 transition-colors">Home</Link></li>
+                        <li><Link to="/" className="hover:text-rose-400 transition-colors">About</Link></li>
+                        <li><Link to="/" className="hover:text-rose-400 transition-colors">Contact</Link></li>
+                        <li><Link to="/" className="hover:text-rose-400 transition-colors">Privacy Policy</Link></li>
+                        <li><Link to="/" className="hover:text-rose-400 transition-colors">Terms of Service</Link></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 className="text-[14px] font-black tracking-widest text-white uppercase mb-6">Connect</h3>
+                    <ul className="text-sm space-y-4 text-slate-400">
+                        <li>
+                            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-rose-400 transition-colors"><FaGithub className="w-4 h-4" /><span>GitHub</span></a>
+                        </li>
+                        <li>
+                            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-rose-400 transition-colors"><FaTwitter className="w-4 h-4" /><span>Twitter</span></a>
+                        </li>
+                        <li>
+                            <a href="mailto:mochogestanley80@gmail.com" className="flex items-center gap-2 hover:text-rose-400 transition-colors"><FaEnvelope className="w-4 h-4" /> <span>Mail</span></a>
+                        </li>
+                        <li>
+                            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-rose-400 transition-colors"><FaFacebook className="w-4 h-4" /> <span>Facebook</span></a>
+                        </li>
+                    </ul>
+                </div>
+                <div className="col-span-2 lg:col-span-1">
+                    <h3 className="text-[14px] font-black tracking-widest text-white uppercase mb-6">Contact Us</h3>
+                    <div className="text-sm space-y-4 text-slate-400">
+                      <p className="flex items-center gap-3 hover:text-white transition-colors cursor-pointer">
+                        <Phone className="w-4 h-4 text-rose-500" />
+                        <span className="font-mono">+254-743-587-157</span>
+                      </p>
+                      <p className="flex items-center gap-3 hover:text-white transition-colors cursor-pointer">
+                        <Mail className="w-4 h-4 text-rose-500" />
+                        <span>mochogestanley80@gmail.com</span>
+                      </p>
+                      <p className="flex items-center gap-3 hover:text-white transition-colors cursor-pointer">
+                        <MapPin className="w-4 h-4 text-rose-500 shrink-0" />
+                        <span>Nairobi, Kenya<br/>14252 - 00200</span>
+                      </p>
                     </div>
                 </div>
+              </div>
 
-          {/* App Version */}
-          <p className="text-center text-xs text-gray-900 mt-2">v8.0.0</p>
-          <p className="pt-2 text-center text-sm text-gray-400 pb-6 tracking-wide">
-            © {new Date().getFullYear()} StanShow Movie Ticket App. All rights reserved.
-            <p className='mt-2'>
-                Powered by {""}
-                <a href="https://www.themoviedb.org/" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-blue-500 hover:underline">
-                    Stanley Mochoge (+254743587157)
-                </a>
-            </p>
-          </p>
+            </div>
+
+            {/* Bottom Bar */}
+            <div className="mt-4 flex md:flex-row items-center justify-between gap-4 text-center">
+              <div className="text-center">
+                <p className="text-slate-500">
+                    © {new Date().getFullYear()} StanShow Movie Ticket App. All rights reserved.
+                </p>
+                <p className="text-xs text-slate-600 mt-2 font-medium">
+                    Powered by <a href="https://www.themoviedb.org/"  target='_blank' className="text-rose-500/80 hover:text-rose-400 transition-colors">Stanley Mochoge (+254743587157)</a>
+                </p>
+              </div>
+              <div className="text-xs font-mono text-slate-600 uppercase tracking-widest bg-white/5 px-3 py-1 rounded-full border border-white/10">v8.0.0</div>
+            </div>
+
+          </div>
 
           {/* Back to Top Button */}
           <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="fixed bottom-6 right-6  text-white p-2 rounded-full shadow-lg hover:bg-pink-500 transition z-50"
-            aria-label="Back to top"
-          >
-            ↑
+            onClick={scrollToTop}
+            className="absolute -top-6 right-8 md:right-10 bg-rose-500 border border-rose-500 hover:bg-rose-500 text-white p-3 rounded-full shadow-[0_0_20px_rgba(244,63,94,0.3)] transition-all z-50 group hover:-translate-y-1"
+            aria-label="Back to top">
+            <ArrowUp className="w-3 h-3 group-hover:-translate-y-0.5 transition-transform" />
           </button>
         </footer>
-      )
-    }
+    );
+}
 
 export default Footer
