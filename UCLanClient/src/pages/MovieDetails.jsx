@@ -1,6 +1,5 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-//import { dummyDateTimeData, dummyShowsData } from '../assets/assets'
 import { useEffect, useState } from 'react'
 import { Heart, PlayCircleIcon, StarIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
@@ -34,7 +33,7 @@ const MovieDetails = () => {
     try {
       if(!user) return toast.error('Please login to Proceed');
       const {data} = await axios.post('/api/user/update-favorite', {movieId: id}, 
-        {headers:{Authorization:`Bearer ${await getToken()}`}})
+        {headers:{ Authorization: `Bearer ${await getToken()}`}})
       if(data.success){
         await fetchFavoriteMovies();
         toast.success(data.message)

@@ -3,14 +3,13 @@ import Loading from '../components/Loading'
 import BlurCircle from '../components/BlurCircle'
 import timeFormat from '../lib/timeFormat'
 import dateFormat from '../lib/dateFormat'
-//import { dummyBookingData } from '../assets/assets'
 import { useAppContext } from '../context/AppContext'
 import { Link } from 'react-router-dom'
 
 const MyBookings = () => {
   const currecy = import.meta.env.VITE_CURRENCY
 
-  const {axios, getToken, user, image_Base_Url} = useAppContext();
+  const { axios, getToken, user, image_Base_Url } = useAppContext();
 
   const [bookings, setbooking] = useState([])
   const [isLoading, setIsLoading] = useState(true)
