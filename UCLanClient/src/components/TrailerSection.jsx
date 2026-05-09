@@ -25,16 +25,21 @@ const TrailersSection = () => {
         <div className="absolute top-0 right-0 w-125 h-125 bg-rose-500/20 rounded-full blur-[120px] -z-10 -translate-y-1/2 translate-x-1/3"></div>
           <div className="absolute bottom-0 left-0 w-125 h-125 bg-purple-500/20 rounded-full blur-[120px] -z-10 translate-y-1/3 -translate-x-1/2"></div>
           <ReactPlayer
-            url={currentTrailer.videoUrl}
-            controls={true}
-            width="100%"
-            height="540px"
-            playIcon={
-              <div className="w-20 h-20 bg-rose-600/80 backdrop-blur-md rounded-full flex items-center justify-center border border-rose-500/50 hover:scale-110 hover:bg-rose-500 transition-all shadow-[0_0_40px_rgba(244,63,94,0.4)] cursor-pointer">
-                  <Play className="w-8 h-8 text-white ml-2 fill-current" />
-              </div>
-            }
-          />
+            src={`https://www.youtube.com/embed/${currentTrailer.videoUrl}?autoplay=1&controls=1&modestbranding=1&rel=0`}
+              title={currentTrailer.title}
+              className="w-full h-full"
+              allowFullScreen
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              controls={true}
+              width="100%"
+              height="540px"
+              playIcon={
+                <div className="w-20 h-20 bg-rose-600/80 backdrop-blur-md rounded-full flex items-center justify-center border border-rose-500/50 hover:scale-110 hover:bg-rose-500 transition-all shadow-[0_0_40px_rgba(244,63,94,0.4)] cursor-pointer">
+                    <Play className="w-8 h-8 text-white ml-2 fill-current" />
+                </div>
+              }
+        />
+        
     </div>
 
     <div className="mt-20">
