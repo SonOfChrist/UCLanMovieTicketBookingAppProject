@@ -73,7 +73,7 @@ const releaseSeatsAfterUnpaid = inngest.createFunction(
 const sendBookingConfirmationEmail = inngest.createFunction(
     { id: "send-booking-confirmation-email", triggers: [{ event: "app/booking.created" }] },
     async ({ event, step }) => {
-        const { userId, bookingId } = event.data;
+        const { bookingId } = event.data;
        
         const booking= await Booking.findById(bookingId).populate({
             path: 'show',
