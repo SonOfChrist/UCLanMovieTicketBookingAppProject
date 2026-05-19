@@ -14,6 +14,10 @@ import { inngest, functions } from './inngest/index.js';
 const app = express();
 const port = 3000;
 
+//stripeWebhook
+app.use('/api/stripe', express.raw({type: 'application/json'}), stripeWebhook)
+
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -21,8 +25,6 @@ app.use(clerkMiddleware());
 
 await connectDB();
 
-//stripeWebhook
-app.use('/api/stripe', express.raw({type: 'application/json'}), stripeWebhook)
 
 // Routes
 app.get('/', (req, res) => {res.send('Welcome to the UCLan Movie Ticket App Server!');});

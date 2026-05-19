@@ -36,11 +36,11 @@ const ListBookings = () => {
         <table className='w-full border-collapse rounded-md overflow-hidden text-nowrap'>
           <thead>
             <tr className='bg-primary/10 text-left text-white'>
-            <th className='p-2 font-medium pl-5'>UserName</th>
+            <th className='p-2 font-medium pl-5'>User Name</th>
             <th className='p-2 font-medium'>Movie Name</th>
             <th className='p-2 font-medium'>Show Time</th>
             <th className='p-2 font-medium'>Seats</th>
-            <th className='p-2 font-medium'>Amoount</th>
+            <th className='p-2 font-medium'>Amount</th>
             </tr>
           </thead>
           <tbody className='text-sm font-light'>
