@@ -19,8 +19,8 @@ app.use('/api/stripe', express.raw({type: 'application/json'}), stripeWebhook)
 
 
 // Middleware
-app.use(cors());
 app.use(express.json());
+app.use(cors());
 app.use(clerkMiddleware());
 
 await connectDB();
