@@ -1,6 +1,6 @@
 # UCLan Movie Bookiing Ticket App
 ```bash
--  <img src="/UCLanclient/public/MoanaBackground.jpg" alt="UCLanMovieApp-Project" class="Project" />
+<img src="/UCLanclient/public/MoanaBackground.jpg" alt="UCLanMovieApp-Project" class="Project" />
 ```
 This repository contains a full-stack movie ticket booking application with a React + Vite frontend and an Express + MongoDB backend.
 Repository layout
